@@ -1111,21 +1111,27 @@
     </div>
 
     <script>
-        class LiveMarketFeeds {
+      class LiveMarketFeeds {
     constructor() {
         this.providers = {
-            ethereum: "wss://eth-mainnet.g.alchemy.com/v2/d1UPobWEXOwwvhHHugchj",
-            binance: "wss://stream.binance.com:9443/ws/btcusdt@depth",
-            coingecko: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd",
-            binanceReferral: "https://www.binance.com/referral/earn-together/refer-in-hotsummer/claim?hl=en&ref=GRO_20338_L9O66&utm_source=default"
+            coingecko: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd"
         };
     }
 
     async fetchCoinGeckoPrices() {
-        const res = await fetch(this.providers.coingecko);
-        return await res.json();
+        try {
+            const res = await fetch(this.providers.coingecko);
+            return await res.json();
+        } catch (e) {
+            console.error("Failed to fetch prices:", e);
+            return null;
+        }
     }
 
+    updatePriceTicker(prices) {
+        // ... your updatePriceTicker method code
+    }
+}
     connectBinanceWebSocket() {
         const ws = new WebSocket(this.providers.binance);
         ws.onmessage = (event) => {
