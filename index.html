@@ -1141,8 +1141,69 @@
     const tickerContainer = document.getElementById('cryptoTicker');
     if (!tickerContainer) return;
 
-    // Generate random price changes for demo purposes (since CoinGecko doesn't provide change percentages in this endpoint)
+    // Generate random price changes for demo (since CoinGecko doesn't provide change percentages)
     const btcChange = (Math.random() * 4 - 2).toFixed(1); // -2% to +2%
+    const ethChange = (Math.random() * 4 - 2).toFixed(1);
+    const bnbChange = (Math.random() * 4 - 2).toFixed(1);
+
+    tickerContainer.innerHTML = `
+        <div class="ticker-item">BTC <span class="${btcChange >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString()} (${btcChange > 0 ? '+' : ''}${btcChange}%)</span></div>
+        <div class="ticker-item">ETH <span class="${ethChange >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString()} (${ethChange > 0 ? '+' : ''}${ethChange}%)</span></div>
+        <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString()} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
+        <!-- Duplicate for animation -->
+        <div class="ticker-item">BTC <span class="${btcChange >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString()} (${btcChange > 0 ? '+' : ''}${btcChange}%)</span></div>
+        <div class="ticker-item">ETH <span class="${ethChange >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString()} (${ethChange > 0 ? '+' : ''}${ethChange}%)</span></div>
+        <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString()} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
+    `;
+}
+
+        // ===== LIVE MARKET FEEDS CLASS =====
+class LiveMarketFeeds {
+    constructor() {
+        this.providers = {
+            coingecko: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd"
+        };
+    }
+
+    async fetchCoinGeckoPrices() {
+        try {
+            const res = await fetch(this.providers.coingecko);
+            return await res.json();
+        } catch (e) {
+            console.error("Failed to fetch prices:", e);
+            return null;
+        }
+    }
+
+    updatePriceTicker(prices) {
+        if (!prices) return;
+        const tickerContainer = document.getElementById('cryptoTicker');
+        if (!tickerContainer) return;
+
+        // Generate random price changes for demo (since CoinGecko doesn't provide change percentages)
+        const btcChange = (Math.random() * 4 - 2).toFixed(1); // -2% to +2%
+        const ethChange = (Math.random() * 4 - 2).toFixed(1);
+        const bnbChange = (Math.random() * 4 - 2).toFixed(1);
+
+        tickerContainer.innerHTML = `
+            <div class="ticker-item">BTC <span class="${btcChange >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${btcChange > 0 ? '+' : ''}${btcChange}%)</span></div>
+            <div class="ticker-item">ETH <span class="${ethChange >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${ethChange > 0 ? '+' : ''}${ethChange}%)</span></div>
+            <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
+            <!-- Duplicate for animation -->
+            <div class="ticker-item">BTC <span class="${btcChange >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${btcChange > 0 ? '+' : ''}${btcChange}%)</span></div>
+            <div class="ticker-item">ETH <span class="${ethChange >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${ethChange > 0 ? '+' : ''}${ethChange}%)</span></div>
+            <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
+        `;
+    }
+}
+
+   updatePriceTicker(prices) {  // ✅ NOW HAS CORRECT METHOD NAME
+    if (!prices) return;
+    const tickerContainer = document.getElementById('cryptoTicker');
+    if (!tickerContainer) return;
+
+    // Generate random price changes for demo
+    const btcChange = (Math.random() * 4 - 2).toFixed(1);
     const ethChange = (Math.random() * 4 - 2).toFixed(1);
     const bnbChange = (Math.random() * 4 - 2).toFixed(1);
 
@@ -1156,42 +1217,6 @@
         <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
     `;
 }
-
-        // ===== LIVE MARKET FEEDS CLASS =====
-        class LiveMarketFeeds {
-            constructor() {
-                this.providers = {
-                    coingecko: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd"
-                };
-            }
-
-            async fetchCoinGeckoPrices() {
-                try {
-                    const res = await fetch(this.providers.coingecko);
-                    return await res.json();
-                } catch (e) {
-                    console.error("Failed to fetch prices:", e);
-                    return null;
-                }
-            }
-
-            (prices) {
-                if (!prices) return;
-                const tickerContainer = document.getElementById('cryptoTicker');
-                if (!tickerContainer) return;
-
-                tickerContainer.innerHTML = `
-                    <div class="ticker-item">BTC <span class="${prices.bitcoin.usd_change_percentage >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${prices.bitcoin.usd_change_percentage > 0 ? '+' : ''}${prices.bitcoin.usd_change_percentage.toFixed(1)}%)</span></div>
-                    <div class="ticker-item">ETH <span class="${prices.ethereum.usd_change_percentage >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${prices.ethereum.usd_change_percentage > 0 ? '+' : ''}${prices.ethereum.usd_change_percentage.toFixed(1)}%)</span></div>
-                    <div class="ticker-item">BNB <span class="${prices.binancecoin.usd_change_percentage >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${prices.binancecoin.usd_change_percentage > 0 ? '+' : ''}${prices.binancecoin.usd_change_percentage.toFixed(1)}%)</span></div>
-                    <!-- Duplicate for animation -->
-                    <div class="ticker-item">BTC <span class="${prices.bitcoin.usd_change_percentage >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${prices.bitcoin.usd_change_percentage > 0 ? '+' : ''}${prices.bitcoin.usd_change_percentage.toFixed(1)}%)</span></div>
-                    <div class="ticker-item">ETH <span class="${prices.ethereum.usd_change_percentage >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${prices.ethereum.usd_change_percentage > 0 ? '+' : ''}${prices.ethereum.usd_change_percentage.toFixed(1)}%)</span></div>
-                    <div class="ticker-item">BNB <span class="${prices.binancecoin.usd_change_percentage >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${prices.binancecoin.usd_change_percentage > 0 ? '+' : ''}${prices.binancecoin.usd_change_percentage.toFixed(1)}%)</span></div>
-                `;
-            }
-        }
-
         // ===== LOOP ORACLE CLASS =====
         class LoopOracle {
             constructor() {updatePriceTicker
