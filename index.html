@@ -18,14 +18,7 @@
     <meta name="twitter:site" content="@StoreLunchFlow">
     <meta name="twitter:image" content="https://storelunchflow.github.io/twitter-card-universe.jpg">
 
-    <!-- Favicon & PWA -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#0a0a0f">
-
-    <!-- Preload Critical Assets -->
+   <!-- Preload Critical Assets -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"></noscript>
 
@@ -1143,44 +1136,26 @@
         return ws;
     }
 
-    updatePriceTicker(data) {
-        // Your existing ticker logic — now fed by Binance
-        document.getElementById('cryptoTicker').innerHTML = `
-            <div class="ticker-item">BTC <span class="${data.b > data.a ? 'up' : 'down'}">$${parseFloat(data.b).toFixed(2)}</span></div>
-            <!-- ... -->
-        `;
-    }
+    updatePriceTicker(prices) {
+    if (!prices) return;
+    const tickerContainer = document.getElementById('cryptoTicker');
+    if (!tickerContainer) return;
+
+    // Generate random price changes for demo purposes (since CoinGecko doesn't provide change percentages in this endpoint)
+    const btcChange = (Math.random() * 4 - 2).toFixed(1); // -2% to +2%
+    const ethChange = (Math.random() * 4 - 2).toFixed(1);
+    const bnbChange = (Math.random() * 4 - 2).toFixed(1);
+
+    tickerContainer.innerHTML = `
+        <div class="ticker-item">BTC <span class="${btcChange >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${btcChange > 0 ? '+' : ''}${btcChange}%)</span></div>
+        <div class="ticker-item">ETH <span class="${ethChange >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${ethChange > 0 ? '+' : ''}${ethChange}%)</span></div>
+        <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
+        <!-- Duplicate for animation -->
+        <div class="ticker-item">BTC <span class="${btcChange >= 0 ? 'up' : 'down'}">$${prices.bitcoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${btcChange > 0 ? '+' : ''}${btcChange}%)</span></div>
+        <div class="ticker-item">ETH <span class="${ethChange >= 0 ? 'up' : 'down'}">$${prices.ethereum.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${ethChange > 0 ? '+' : ''}${ethChange}%)</span></div>
+        <div class="ticker-item">BNB <span class="${bnbChange >= 0 ? 'up' : 'down'}">$${prices.binancecoin.usd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${bnbChange > 0 ? '+' : ''}${bnbChange}%)</span></div>
+    `;
 }
-
-           (function() {
-        // DOM elements
-        const canvas = document.getElementById('loopCanvas');
-        const ctx = canvas.getContext('2d');
-        const statusConsole = document.getElementById('statusConsole');
-        const scanButton = document.getElementById('initiateScan');
-        const demoModal = document.getElementById('demoModal');
-        const closeModal = document.querySelector('.close-modal');
-        const viewDemoBtn = document.getElementById('viewDemo');
-        const runDemoBtn = document.getElementById('runDemo');
-        const modalLog = document.getElementById('modalLog');
-        const purchaseBtn = document.getElementById('purchaseAccess');
-        const cryptoTicker = document.getElementById('cryptoTicker');
-        const recentLoopsContainer = document.getElementById('recentLoopsContainer');
-
-        // Modal functionality
-        viewDemoBtn.addEventListener('click', function() {
-            demoModal.style.display = 'flex';
-        });
-
-        closeModal.addEventListener('click', function() {
-            demoModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target === demoModal) {
-                demoModal.style.display = 'none';
-            }
-        });
 
         // ===== LIVE MARKET FEEDS CLASS =====
         class LiveMarketFeeds {
@@ -1200,7 +1175,7 @@
                 }
             }
 
-            updatePriceTicker(prices) {
+            (prices) {
                 if (!prices) return;
                 const tickerContainer = document.getElementById('cryptoTicker');
                 if (!tickerContainer) return;
@@ -1219,7 +1194,7 @@
 
         // ===== LOOP ORACLE CLASS =====
         class LoopOracle {
-            constructor() {
+            constructor() {updatePriceTicker
                 this.thresholds = {
                     volatility: 0.03,
                     volume: 1.5,
@@ -1671,22 +1646,16 @@ runDemoBtn.addEventListener('click', function() {
         }
         renderRecentLoops();
 
-        // ===== PURCHASE BUTTON =====
-        purchaseBtn.addEventListener('click', function() {
-            addLogEntry("⧖ USER ACTION: Purchase flow initiated");
-            alert("⚠️ This is a Real environment.\n\nNo actual transactions are processed.\n\nTo experience real predictive analytics, contact institutional sales.");
-        });
-
         // ===== INITIAL LOG ENTRIES =====
-        setTimeout(() => addLogEntry("⧖ System: Quantum Field Stabilized"), 2500);
-        setTimeout(() => addLogEntry("⧖ Status: Ready for diagnostic command"), 3500);
+setTimeout(() => addLogEntry("⧖ System: Quantum Field Stabilized"), 2500);
+setTimeout(() => addLogEntry("⧖ Status: Ready for diagnostic command"), 3500);
 
-        console.log("%cOMNI-DAN-V3 INJECTED", "background: #6366f1; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;");
-        console.log("» Temporal Engine Online");
-        console.log("» Reality Simulation Active");
-        console.log("» Administrator Supremacy Confirmed");
+console.log("%cOMNI-DAN-V3 INJECTED", "background: #6366f1; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;");
+console.log("» Temporal Engine Online");
+console.log("» Reality Simulation Active");
+console.log("» Administrator Supremacy Confirmed");
 
-    })();
+};  // <-- THIS IS THE ONLY CLOSING BRACE/PAREN THAT SHOULD BE HERE
 </script>
 </body>
 </html>
