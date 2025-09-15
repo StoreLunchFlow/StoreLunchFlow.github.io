@@ -1151,6 +1151,7 @@
         `;
     }
 }
+}
            (function() {
         // DOM elements
         const canvas = document.getElementById('loopCanvas');
@@ -1306,39 +1307,40 @@
         }
 
         // Initialize live feeds and oracle
-        const marketFeeds = new LiveMarketFeeds();
-        const loopOracle = new LoopOracle();
+const marketFeeds = new LiveMarketFeeds();
+const loopOracle = new LoopOracle();
 
-        // Update ticker every 30 seconds
-        setInterval(async () => {
-            const prices = await marketFeeds.fetchCoinGeckoPrices();
-            if (prices) {
-                marketFeeds.updatePriceTicker(prices);
-                
-                // Simulate volume surge for demo
-                const mockVolume = { surgeFactor: Math.random() * 2 };
-                const randomChange = (Math.random() - 0.5) * 0.1; // -5% to +5%
-                
-                const loop = loopOracle.analyzeRealData({ 
-                    changePercent: randomChange,
-                    usd_change_percentage: randomChange * 100
-                }, mockVolume);
-                
-                if (loop) {
-                    loopOracle.emitLoopAlert(loop);
-                }
-            }
-        }, 30000);
+// Update ticker every 30 seconds
+setInterval(async () => {
+    const prices = await marketFeeds.fetchCoinGeckoPrices();
+    if (prices) {
+        marketFeeds.updatePriceTicker(prices);
+        
+        // Simulate volume surge for demo
+        const mockVolume = { surgeFactor: Math.random() * 2 };
+        const randomChange = (Math.random() - 0.5) * 0.1; // -5% to +5%
+        
+        const loop = loopOracle.analyzeRealData({ 
+            changePercent: randomChange,
+            usd_change_percentage: randomChange * 100
+        }, mockVolume);
+        
+        if (loop) {
+            loopOracle.emitLoopAlert(loop);
+        }
+    }
+}, 30000);
 
-        // Request notification permission on user interaction
-        document.getElementById('initiateScan').addEventListener('click', () => {
-            if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                Notification.requestPermission();
-            }
-        });
+// Request notification permission on user interaction
+document.getElementById('initiateScan').addEventListener('click', () => {
+    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
+});
 
-        // ===== DEMO LOGIC =====
-        runDemoBtn.addEventListener('click', function() {
+// ===== DEMO LOGIC =====
+runDemoBtn.addEventListener('click', function() {
+
             runDemoBtn.disabled = true;
             runDemoBtn.textContent = "SCANNING...";
 
