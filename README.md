@@ -75,7 +75,7 @@ Try it now:
 
 ## 📫 Contact
 
-- Email: [mailto:licenses@storelunch.ai](StoreLunchFlow@outlook.com)
+- Email: [StoreLunchFlow@outlook.com](StoreLunchFlow@outlook.com)
 - [GitHub Issues](https://github.com/StoreLunchFlow/StoreLunchFlow.github.io/issues)
 
 ---
